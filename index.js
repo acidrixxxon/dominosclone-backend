@@ -31,7 +31,7 @@ const io = new Server(httpServer, {cors: {
 
 
 
-httpServer.listen(3001,async () => {
+httpServer.listen(process.env.PORT || 3001,async () => {
   try {
     mongoose.connect(process.env.DATABASE_URL).then(() => {
       console.log('Server has been started and MONGODB connected!')
