@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 
 const pizzaSchema = new mongoose.Schema({
@@ -19,8 +19,9 @@ const pizzaSchema = new mongoose.Schema({
     default: 0,
   },
   category: {
-    type: Number,
-    default: 0
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'PizzaCategory',
+    required: true
   },
   class: {
     type: Number,
@@ -30,7 +31,23 @@ const pizzaSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  ingridients: [{id: {type: Number,required: true},qty: {type: Number,required: true}}],
+  ingridients: [
+    {
+      ingridientId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PizzaIngridient',
+        required: true
+      },
+      qty: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  aNewOne: {
+    type: Boolean,
+    default: false
+  },
   variants: [
     {
       title: { 
@@ -38,10 +55,6 @@ const pizzaSchema = new mongoose.Schema({
         required: true
       },
       variants: [{
-        id: {
-          type: Number,
-          required: true
-        },
         isSell: {
           type: Boolean,
           default: true
@@ -60,6 +73,8 @@ const pizzaSchema = new mongoose.Schema({
         }
       }]
     }]
+},{
+  versionKey: false
 })
 
 

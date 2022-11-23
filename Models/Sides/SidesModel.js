@@ -37,6 +37,8 @@ const SidesModel = new mongoose.Schema({
       required: true
     }
   }]
+},{
+  versionKey: false
 })
 
 

@@ -1,0 +1,46 @@
+[ {
+  "title": "Rich Яблуко",
+  "defaultPrice": 58,
+  "class": 2,
+  "rating": 5,
+  "category": "637364d74f4f9b6fe3c75d74",
+  "imageUrl": "https://media.dominos.ua/__sized__/menu/product_osg_image_category/2020/09/11/apple-thumbnail-960x960.png",
+  "variants": [
+   {
+    "size": "1 л",
+    "price": 58
+   }
+  ]
+ },{
+  "title": "Coca-Cola",
+  "defaultPrice": 31,
+  "class": 2,
+  "rating": 3,
+  "category": "637364b84f4f9b6fe3c75d72",
+  "imageUrl": "https://media.dominos.ua/__sized__/menu/product_osg_image_category/2020/09/11/cc-thumbnail-960x960.png",
+  "variants": [   
+    {
+        "size": "330 мл",
+        "price": 31
+    },   {
+    "size": "500 мл",
+    "price": 44
+   },
+   {
+    "size": "1 л",
+    "price": 57
+   }
+  ]
+ }, {
+  "title": "BonAqua газована",
+  "defaultPrice": 31,
+  "class": 2,
+  "rating": 2,
+  "category": "637364b84f4f9b6fe3c75d72",
+  "imageUrl": "https://media.dominos.ua/__sized__/menu/product_osg_image_category/2020/09/11/gaz-thumbnail-960x960.png",
+  "variants": [     {
+    "size": "500 мл",
+    "price": 31
+   }
+  ]
+ }]
