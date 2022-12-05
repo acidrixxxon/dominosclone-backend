@@ -7,9 +7,11 @@ import PizzaRouter from './Routes/PizzaRouter.js'
 import SidesRouter from './Routes/SidesRouter.js'
 import DrinkRouter from './Routes/DrinkRouter.js'
 import OrderRouter from './Routes/OrderRouter.js'
+import UserRouter from './Routes/UserRouter.js'
 import dotenv from 'dotenv'
 import SidesCategory from './Models/Sides/SidesCategoryModel.js'
 import Sides from './Models/Sides/SidesModel.js'
+import { errorMiddleware } from './middlewares/error-middleware.js'
 dotenv.config()
 
 const app = express()
@@ -23,6 +25,8 @@ app.use('/sides',SidesRouter)
 app.use('/pizza',PizzaRouter)
 app.use('/drinks',DrinkRouter)
 app.use('/order',OrderRouter)
+app.use('/user',UserRouter)
+app.use(errorMiddleware)
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {cors: {

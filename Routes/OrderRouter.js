@@ -1,6 +1,6 @@
 import express from 'express'
-import DrinkCategory from '../Models/Drinks/DrinkCategoryModel.js'
-import Drink from '../Models/Drinks/DrinkModel.js'
+import OrderController from '../Controllers/OrderController.js'
+import authMiddleware from '../middlewares/auth-middleware.js'
 import Order from '../Models/OrderModel.js'
 
 const router = express.Router()
@@ -26,6 +26,8 @@ router.post('/create',async (req,res) => {
   }
 })
 
+router.get('/getuserorders',authMiddleware,OrderController.getUserOrders)
+
 router.get('/:id',async (req,res) => {
   try {
     const { id } = req.params
@@ -43,5 +45,6 @@ router.get('/:id',async (req,res) => {
     })
   }
 })
+
 
 export default router
