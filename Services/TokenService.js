@@ -1,8 +1,6 @@
-import jwt from 'jsonwebtoken'
-import UserDto from '../Dto/UserDto.js'
 import User from '../Models/UserModel.js'
-
-
+import UserDto from '../Dto/UserDto.js'
+import jwt from 'jsonwebtoken'
 
 class TokenService {
 
@@ -28,11 +26,11 @@ class TokenService {
 
     const userDto = new UserDto(user)
 
-    const accessToken = jwt.sign({userDto},process.env.JWT_SECRET_KEY,{
-      expiresIn: '30m'
+    const accessToken = jwt.sign({...userDto},process.env.JWT_SECRET_KEY,{
+      expiresIn: '2h'
     })
      
-    const refreshToken = jwt.sign({userDto},process.env.JWT_SECRET_KEY,{
+    const refreshToken = jwt.sign({...userDto},process.env.JWT_SECRET_KEY,{
       expiresIn: '30d'
     })
 

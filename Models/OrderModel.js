@@ -1,7 +1,5 @@
 import mongoose from 'mongoose'
 
-
-
 const OrderSchema = new mongoose.Schema({
   cart: {
     items: [],
@@ -9,7 +7,7 @@ const OrderSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    totalPrice: {
+    totalItems: {
       type: Number,
       default: 0
     }

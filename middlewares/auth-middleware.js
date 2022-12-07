@@ -1,6 +1,6 @@
 import ApiError from "./ApiError.js"
-import jwt from 'jsonwebtoken'
 import User from './../Models/UserModel.js'
+import jwt from 'jsonwebtoken'
 
 const authMiddleware = async (req,res,next) => {
   try {
@@ -13,11 +13,14 @@ const authMiddleware = async (req,res,next) => {
         if (err) {
           return res.status(500).json({message: 'Не вдалось валідувати токен!',success: false})
         } else {
-          const user = await User.findById(decoded._id).select('-password -confirmLink')
-          if (!user) throw new ApiError(500,'Користувача по цьому токену не знайдено!')
-          
-          req.user = user
-          next()
+          User.findById(decoded._id).select('-password -confirmLink')
+            .then((user) => {
+              if (!user) return res.status(500).json({message: 'Користувача по цьому токену не знайдено!',success: false}) 
+              
+              req.user = user
+              next()
+            })
+            .catch(error => next(error))
         }
       })
     } else {
