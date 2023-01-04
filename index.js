@@ -8,6 +8,7 @@ import SidesRouter from './Routes/SidesRouter.js'
 import DrinkRouter from './Routes/DrinkRouter.js'
 import OrderRouter from './Routes/OrderRouter.js'
 import UserRouter from './Routes/UserRouter.js'
+import SearchRouter from './Routes/SearchRouter.js'
 import dotenv from 'dotenv'
 import SidesCategory from './Models/Sides/SidesCategoryModel.js'
 import Sides from './Models/Sides/SidesModel.js'
@@ -26,6 +27,7 @@ app.use('/pizza',PizzaRouter)
 app.use('/drinks',DrinkRouter)
 app.use('/order',OrderRouter)
 app.use('/user',UserRouter)
+app.use('/search',SearchRouter)
 app.use(errorMiddleware)
 
 const httpServer = createServer(app)

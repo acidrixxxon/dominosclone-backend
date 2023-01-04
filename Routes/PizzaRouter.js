@@ -1,4 +1,5 @@
 import express from 'express'
+import PizzaController from '../Controllers/PizzaController.js'
 import PizzaCategory from '../Models/Pizza/PizzaCategoryModel.js'
 import PizzaIngridientCategory from '../Models/Pizza/PizzaIngridientCategory.js'
 import PizzaIngridient from '../Models/Pizza/PizzaIngridientModel.js'
@@ -162,6 +163,11 @@ router.post('/ingridient/add_ingridient',async (req,res) => {
     return res.status(500).json({error: error.message})
   }
 })
+
+router.get('/ingridient/get_all',PizzaController.getIngridientsList)
+
+router.get('/product/:id',PizzaController.getPizzaById)
+
 
 
 

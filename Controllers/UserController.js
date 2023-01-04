@@ -57,7 +57,7 @@ class UserController {
       const { link } = req.params
       
       const user = await UserService.activateAccount(link)
-      return res.redirect(process.env.FRONTEND_URL)
+      return res.redirect(`${process.env.FRONTEND_URL}/?authmodal=active`)
     } catch (error) {
       next(error)
     }

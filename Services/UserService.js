@@ -1,6 +1,6 @@
 import User from "../Models/UserModel.js"
 import bcrypt from 'bcrypt'
-import uuid from 'uuid'
+import { v4 } from 'uuid'
 import MailService from "./MailService.js"
 import ApiError from "../middlewares/ApiError.js"
 import UserDto from "../Dto/UserDto.js"
@@ -40,7 +40,7 @@ class UserService {
       if (existUser) throw new ApiError(500,'Користувач з таким email вже існує') 
 
       const hashedPassword = await bcrypt.hash(password,2)
-      const confirmLink = uuid.v4()
+      const confirmLink = v4()
 
       const newUser = await User.create({email,password: hashedPassword,confirmLink})
       await MailService.sendActivationMail(newUser.email,newUser.confirmLink)

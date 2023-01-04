@@ -55,7 +55,7 @@ const pizzaSchema = new mongoose.Schema({
         required: true
       },
       variants: [{
-        isSell: {
+        inSell: {
           type: Boolean,
           default: true
         },
