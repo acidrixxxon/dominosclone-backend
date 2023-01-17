@@ -7,8 +7,13 @@ const router = Router()
 
 
 router.get('/',async (req,res) => {
-  let productName = req.query.name
+  const productName = req.query.name
   let result = []
+  const limit = req.query.limit ? Number(req.query.limit) : 3
+  const pageNumber = req.query.page ? Number(req.query.page) : 1
+  let lastIndex
+  let firstIndex
+  let pagesCount
 
   if (!productName) return res.status(500).json({message: 'Відстуні параметри пошуку',success: false})
 
@@ -20,10 +25,21 @@ router.get('/',async (req,res) => {
   if (pizza.length > 0 || sides.length > 0 || drinks.length > 0) {
     result = [...result,...pizza,...sides,...drinks]
 
+    firstIndex = (pageNumber - 1) * limit
+    lastIndex = firstIndex + limit
+    pagesCount = Math.ceil(result.length / limit)
+    
+    const paginatedArray = result.slice(firstIndex,lastIndex)
+
     return res.status(200).json({
       message: 'Пошук виконано!',
       success: true,
-      result
+      pagination: {
+        limit,
+        page: pageNumber,
+        pagesCount
+      },
+      result: paginatedArray
     })
   }
   
