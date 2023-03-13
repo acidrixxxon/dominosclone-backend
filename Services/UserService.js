@@ -18,6 +18,8 @@ class UserService {
 
     if(!user.confirmed) throw ApiError.UserAccountNotActivated()
 
+    await MailService.sendActivationMail(user.email,user.confirmLink)
+
     const comparePassword = await bcrypt.compare(password,user.password)
     if (!comparePassword) throw new ApiError(500,'Ви ввели невірний пароль!')
 

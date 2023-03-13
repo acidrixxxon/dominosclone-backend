@@ -9,5 +9,5 @@ export const errorMiddleware = (err,req,res,next) => {
     return res.status(err.status).json({message: err.message,errors: err.errrors,success: false})
   }
 
-  return res.status(500).json({errorMessage: err.message,statusCode: 500})
+  return res.status(500).json({message: err.message,statusCode: 500,success: false})
 }

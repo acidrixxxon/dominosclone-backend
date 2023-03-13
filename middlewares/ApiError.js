@@ -24,7 +24,7 @@ class ApiError extends Error {
   }
 
   static UserAccountNotActivated() {
-    return new ApiError(500,'Ваш аккаунт не активований. Перейдіть на пошту та активуйте його')
+    return new ApiError(500,'Ваш аккаунт не активований. Перейдіть на пошту та активуйте його!')
   }
 
   static MissingUserToken(){

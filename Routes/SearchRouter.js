@@ -50,5 +50,47 @@ router.get('/',async (req,res) => {
   })
 })
 
+router.get('/:id',async (req,res,next) => {
+try {
+  const id = req.params.id
+  let result;
+
+  const pizza = await Pizza.findById(id).populate({path: 'ingridients',populate: {path: 'ingridientId'}})
+  if(pizza) {
+    result = pizza
+
+    return res.status(200).json({
+      message: 'da',
+      success: true,
+      result
+    })
+  }
+  
+  const side = await Side.findById(id)
+  if(side) {
+    result = side
+
+    return res.status(200).json({
+      message: 'da',
+      success: true,
+      result
+    })
+  }
+
+  const drink = await Drinks.findById(id)
+  if(drink) {
+    result = drink
+
+    return res.status(200).json({
+      message: 'Продукт отримано!',
+      success: true,
+      product: result
+    })
+  }
+} catch (error) {
+  next(error)
+}
+})
+
 
 export default router

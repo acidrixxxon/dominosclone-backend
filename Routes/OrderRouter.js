@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post('/create',async (req,res) => {
   try {
-    const { order: { cart,details }} = req.body
+    const { order: { cart,details }} = req.body.body
 
     const newOrder = await Order.create({cart,details})
     
@@ -20,7 +20,7 @@ router.post('/create',async (req,res) => {
     console.log(error.message)
 
     return res.status(500).json({
-      errorMessage: error.nessage,
+      message: error.message,
       success: false
     })
   }
