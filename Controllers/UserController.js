@@ -1,20 +1,18 @@
-import User from "../Models/UserModel.js"
+
 import UserService from "../Services/UserService.js"
-import lodash from 'lodash'
 import ApiError from "../middlewares/ApiError.js"
-import UserDto from "../Dto/UserDto.js"
 import TokenService from "../Services/TokenService.js"
 
 class UserController {
 
-  async loginUser(req,res,next) {
+  async loginUser(req,res) {
     try {
       const { email,password } = req.body
       const user = await UserService.login(email,password)
 
-      return res.status(200).json({message: 'Авторизований!',success: true,user})
+      res.status(200).json({message: 'Авторизований!',success: true,user})
     } catch (error) {
-      next(error)
+      res.status(error.status).json({message: error.message,success: error.success})
     }
   }
 
@@ -36,19 +34,15 @@ class UserController {
 
   async updateProfile(req,res,next) {
     try {
-      const { data } = req.body
-      if (!data || lodash.isEmpty(data)) throw new ApiError(500,'Відсутні дані для оновлення')
-      
-      const updatedUser = await User.findByIdAndUpdate(req.user._id,data)
-      if(!updatedUser) throw new ApiError(500,'Не вдалось оновити профайл!')
+      const data = req.body
+      if(!data) throw new ApiError(500,'Відсутні дані для оновлення')
 
-      const user = await User.findById(updatedUser._id).select('-password -confirmLink')
+      const user = await UserService.updateProfile(req.user._id,data)
+
+      return res.status(200).json({success: true,message: 'Дані успішно оновлені',user})
       
-      if(user) {
-        return res.status(200).json({success: true,message: 'Дані успішно оновлені',user})
-      }
     } catch (error) {
-      next(error)
+      res.status(error.status).json({message: error.message,success: error.success})
     }
   }
 

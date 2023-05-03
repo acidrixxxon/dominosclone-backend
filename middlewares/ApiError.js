@@ -30,6 +30,14 @@ class ApiError extends Error {
   static MissingUserToken(){
     return new ApiError(500,'Відсутній токен користувача')
   }
+
+  static NotValidAccessToken(){
+    return new ApiError(500,'Не вдалось валідувати токен!')
+  }
+
+  static WrongEmail(){
+    return new ApiError(500,'Користувача з таким email не існує!')
+  }
 }
 
 export default ApiError

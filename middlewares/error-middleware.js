@@ -2,12 +2,12 @@ import ApiError from "./ApiError.js"
 
 
 
-export const errorMiddleware = (err,req,res,next) => {
-
+export const errorMiddleware = (err,res) => {
+  
   if (err instanceof ApiError) {
    
-    return res.status(err.status).json({message: err.message,errors: err.errrors,success: false})
+    return res.status(err.status).json({message: err.message,success: false})
   }
 
-  return res.status(500).json({message: err.message,statusCode: 500,success: false})
+  return res.status(500).json({message: err.message,success: false})
 }

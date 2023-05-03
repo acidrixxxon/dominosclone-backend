@@ -5,23 +5,25 @@ import MailService from "./MailService.js"
 import ApiError from "../middlewares/ApiError.js"
 import UserDto from "../Dto/UserDto.js"
 import TokenService from "./TokenService.js"
+import lodash from 'lodash'
 
 
 
 class UserService {
 
   async login(email,password) {
-    if (!email || !password ) throw new ApiError(500,'Заповніть все поля!')
+    if (!email || !password ) throw new ApiError(400,'Заповніть все поля!')
 
     const user = await User.findOne({email})
-    if(!user) throw new ApiError(500,'Користувача з таким email не знайдено!')
+    if(!user) throw new ApiError(400,'Користувача з таким email не знайдено!')
 
-    if(!user.confirmed) throw ApiError.UserAccountNotActivated()
-
-    await MailService.sendActivationMail(user.email,user.confirmLink)
+    if(!user.confirmed) {
+      await MailService.sendActivationMail(user.email,user.confirmLink)
+      throw ApiError.UserAccountNotActivated()
+    }
 
     const comparePassword = await bcrypt.compare(password,user.password)
-    if (!comparePassword) throw new ApiError(500,'Ви ввели невірний пароль!')
+    if (!comparePassword) throw new ApiError(400,'Ви ввели невірний пароль!')
 
     const userDto = new UserDto(user)
     const tokens = await TokenService.generateTokens({...userDto})
@@ -51,6 +53,23 @@ class UserService {
         const user = await User.findById(newUser._id).select('-password')
         if (user) return user
       }
+  }
+  
+  async updateProfile(userId,data) {
+    if (!data || !userId || lodash
+      .isEmpty(data)) throw new ApiError(500,'Відсутні дані для оновлення')
+      
+    const updatedUser = await User.findByIdAndUpdate(userId,data)
+    if(!updatedUser) throw new ApiError(500,'Не вдалось оновити профайл!')
+
+    const user = await User.findById(updatedUser._id).select('-password -confirmLink')
+
+    const userDto = new UserDto(user)
+    const tokens = await TokenService.generateTokens({...userDto})
+
+    const userData = {...userDto,tokens}
+
+    return userData
   }
 
   async activateAccount(link) {

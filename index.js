@@ -16,6 +16,7 @@ import PizzaRouter from './Routes/PizzaRouter.js'
 import SearchRouter from './Routes/SearchRouter.js'
 import SidesRouter from './Routes/SidesRouter.js'
 import UserRouter from './Routes/UserRouter.js'
+import AnalyticsRouter from './Routes/AnalyticsRouter.js'
 dotenv.config()
 
 const app = express()
@@ -48,7 +49,7 @@ app.get('/payment/:id',async (req,res) => {
       })),
       mode: 'payment',
       success_url: `${process.env.FRONTEND_URL}/order/${id}`,
-      cancel_url: `${process.env.FRONTEND_URL}/order/${id}`,
+      cancel_url: `${process.env.FRONTEND_URL}/order/${id}/?paymentProcess=success`,
     })
 
     res.json({url: session.url})
@@ -63,6 +64,7 @@ app.use('/drinks',DrinkRouter)
 app.use('/order',OrderRouter)
 app.use('/user',UserRouter)
 app.use('/search',SearchRouter)
+app.use('/analytics',AnalyticsRouter)
 app.use(errorMiddleware)
 
 const httpServer = createServer(app)
@@ -94,6 +96,6 @@ httpServer.listen(process.env.PORT || 3000,async () => {
     })
 
   } catch (error) {
-    console.log(error)
+    console.log(error.message)
   }
 })

@@ -3,13 +3,15 @@ import OrderController from '../Controllers/OrderController.js'
 import authMiddleware from '../middlewares/auth-middleware.js'
 import Order from '../Models/OrderModel.js'
 import Stripe from 'stripe'
+import ApiError from '../middlewares/ApiError.js'
 
 const router = express.Router()
 const stripe = Stripe('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')
 
 router.post('/create',async (req,res) => {
   try {
-    const { order: { cart,details }} = req.body.body
+    const { cart,details } = req.body
+    if(!cart || !details) throw new ApiError(500,'Помилка! Відсутсні деталі замовлення!')
 
     const newOrder = await Order.create({cart,details})
 
@@ -21,14 +23,15 @@ router.post('/create',async (req,res) => {
           price_data: {
             currency: "uah",
             product_data: {
-              name: item.fulltitle
+              name: item.fulltitle,
+              description: item.class === 0 && item.ingridients.length > 0 && 'Склад піцци: '+ item.ingridients.map((ingrid,index) => `${ingrid.ingridientId.title.toLowerCase()}${ingrid.qty > 1 ? '(подвійна)' : ''}${index + 1 == item.ingridients.length ? '' : ', '} `).join(' ')
             },
             unit_amount: item.price * 100
           },
           quantity: item.qty,
         })),
         mode: 'payment',
-        success_url: `${process.env.FRONTEND_URL}/order/${newOrder._id}`,
+        success_url: `${process.env.FRONTEND_URL}/order/${newOrder._id}?paymentProcess=success`,
         cancel_url: `${process.env.FRONTEND_URL}/order/${newOrder._id}`,
       })
       
@@ -80,5 +83,24 @@ router.get('/:id',async (req,res) => {
   }
 })
 
+router.get('/:id/payment-success',async (req,res) => {
+  try {
+    const { id } = req.params
+    const order = await Order.findById(id)
+
+    if(order._doc.details.customerData.paymentType.status && order._doc.details.customerData.paymentType.stage === 'замовлення сплачене') return res.status(200).json({ message: 'Замовлення вже сплачене',success: true,order})
+
+    const updatedObj = {...order._doc,details: {...order._doc.details,customerData: {...order._doc.details.customerData,paymentType: {...order._doc.details.customerData.paymentType,stage: 'замовлення сплачене',status: true}}}}
+    delete updatedObj.details.customerData.paymentType.paymentLink
+
+    const updatedOrder = await Order.findByIdAndUpdate(order._doc._id,{...updatedObj},{new: true})
+    
+    return res.status(200).json({ message: 'Товар сплачено онлайн!',success: true,order: updatedOrder})
+  } catch (error) {
+    let message = error.message.includes('Cast to ObjectId failed for value') ? 'Не вдалось знайти замовлення за цим ID' : error.message
+
+    return res.status(500).json({message,success: false})
+  }
+})
 
 export default router

@@ -5,15 +5,36 @@ const OrderSchema = new mongoose.Schema({
     items: [],
     totalCost: {
       type: Number,
-      default: 0
+      required: true,
+      min: 50
     },
-    totalItems: {
+    totalCount: {
       type: Number,
-      default: 0
+      required: true,
+      min: 1
     }
   },
   details: {
-
+    orderType: {},
+    customerData: {
+      details: {},
+      client: {
+        name: {
+          type: String,
+          required: true,
+          minlength: 4
+        },
+        email: {
+          type: String,
+          required: true,
+        },
+        phone: {
+          type: String,
+          required: true,
+        }
+      },
+      paymentType: {}
+    },
   },
   status: {
     id: {
