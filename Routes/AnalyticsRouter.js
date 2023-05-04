@@ -27,7 +27,7 @@ router.get('/',authMiddleware,async (req,res) => {
     const dateRange = timeQuery === 'year' ? year : month
 
     const userOrders = await OrderModel.find({"details.customerData.client.email": req.user.email,createdAt: { $gte: dateRange.startDate }})
-
+    console.log(userOrders)
 
     if(userOrders.length > 0) {
       let analytics = {
@@ -49,7 +49,7 @@ router.get('/',authMiddleware,async (req,res) => {
       })
     } else {
       return res.status(200).json({
-        message: 'Не вдалось отримати аналітику',
+        message: 'Не вдалось отримати аналітику!',
         success: false,
         analytics: null
       })

@@ -64,6 +64,7 @@ router.post('/create',async (req,res) => {
 })
 
 router.get('/getuserorders',authMiddleware,OrderController.getUserOrders)
+router.get('/getuseractiveorders',authMiddleware,OrderController.getUserActiveOrders)
 
 router.get('/:id',async (req,res) => {
   try {
